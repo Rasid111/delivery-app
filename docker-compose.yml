@@ -1,0 +1,15 @@
+services:
+  postgres-order:
+    image: postgres:16-alpine
+    container_name: delivery-postgres-order
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: order_db
+      POSTGRES_USER: order_user
+      POSTGRES_PASSWORD: order_pass
+    volumes:
+      - postgres_order_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_order_data:
