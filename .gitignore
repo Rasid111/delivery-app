@@ -1,0 +1,21 @@
+# Build
+**/build/
+**/.gradle/
+**/out/
+**/target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Local config
+**/application-local.yml
+**/.env
