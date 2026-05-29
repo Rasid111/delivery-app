@@ -3,8 +3,8 @@ package com.deliveryapp.orderservice.service;
 import com.deliveryapp.orderservice.dto.CreateOrderRequest;
 import com.deliveryapp.orderservice.domain.Order;
 import com.deliveryapp.orderservice.domain.OrderStatus;
+import com.deliveryapp.orderservice.exception.OrderNotFoundException;
 import com.deliveryapp.orderservice.repository.OrderRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +35,6 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Order getById(UUID id) {
         return orderRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found: " + id));
+                .orElseThrow(() -> new OrderNotFoundException(id));
     }
 }
