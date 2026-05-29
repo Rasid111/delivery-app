@@ -5,6 +5,7 @@ import com.deliveryapp.orderservice.dto.OrderResponse;
 import com.deliveryapp.orderservice.domain.Order;
 import com.deliveryapp.orderservice.service.OrderService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,16 +25,7 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody CreateOrderRequest request) {
         Order order = orderService.createOrder(request);
-        OrderResponse response = new OrderResponse(
-                order.getId(),
-                order.getCourierId(),
-                order.getPickupAddress(),
-                order.getDeliveryAddress(),
-                order.getPrice(),
-                order.getStatus(),
-                order.getCreatedAt(),
-                order.getUpdatedAt()
-        );
+        OrderResponse response = toResponse(order);
         URI location = URI.create("/api/orders/" + order.getId());
         return ResponseEntity.created(location).body(response);
     }
@@ -41,7 +33,11 @@ public class OrderController {
     @GetMapping("/{id}")
     public ResponseEntity<OrderResponse> getOrder(@PathVariable UUID id) {
         Order order = orderService.getById(id);
-        OrderResponse response = new OrderResponse(
+        OrderResponse response = toResponse(order);
+        return ResponseEntity.ok(response);
+    }
+    private OrderResponse toResponse(Order order) {
+        return new OrderResponse(
                 order.getId(),
                 order.getCourierId(),
                 order.getPickupAddress(),
@@ -51,6 +47,5 @@ public class OrderController {
                 order.getCreatedAt(),
                 order.getUpdatedAt()
         );
-        return ResponseEntity.ok(response);
     }
 }
