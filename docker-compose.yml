@@ -23,6 +23,19 @@ services:
     volumes:
       - postgres_courier_data:/var/lib/postgresql/data
 
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: delivery-rabbitmq
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
 volumes:
+  rabbitmq_data:
   postgres_order_data:
   postgres_courier_data:

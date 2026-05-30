@@ -8,6 +8,15 @@ spring:
     password: courier_pass
     driver-class-name: org.postgresql.Driver
 
+  rabbitmq:
+    host: localhost
+    port: 5673
+    username: admin
+    password: admin
+    listener:
+      simple:
+        default-requeue-rejected: false
+
   jpa:
     hibernate:
       ddl-auto: validate
@@ -27,4 +36,5 @@ server:
 
 logging:
   level:
+    org.springframework.amqp: INFO
     org.hibernate.SQL: DEBUG

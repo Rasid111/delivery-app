@@ -16,4 +16,18 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(ex.getMessage());
     }
+
+    @ExceptionHandler(NoAvailableCourierException.class)
+    public ResponseEntity<String> handleNoAvailableCourier(NoAvailableCourierException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(IllegalOrderTransitionException.class)
+    public ResponseEntity<String> handleIllegalOrderTransition(IllegalOrderTransitionException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ex.getMessage());
+    }
 }

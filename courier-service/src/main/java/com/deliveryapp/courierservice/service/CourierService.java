@@ -37,4 +37,16 @@ public class CourierService {
         return courierRepository.findFirstByStatus(CourierStatus.FREE)
                 .orElseThrow(NoAvailableCourierException::new);
     }
+
+    public void markBusy(UUID courierId) {
+        Courier courier = getById(courierId);
+        courier.setStatus(CourierStatus.BUSY);
+        courierRepository.save(courier);
+    }
+
+    public void markFree(UUID courierId) {
+        Courier courier = getById(courierId);
+        courier.setStatus(CourierStatus.FREE);
+        courierRepository.save(courier);
+    }
 }

@@ -5,7 +5,6 @@ import com.deliveryapp.orderservice.dto.OrderResponse;
 import com.deliveryapp.orderservice.domain.Order;
 import com.deliveryapp.orderservice.service.OrderService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +34,18 @@ public class OrderController {
         Order order = orderService.getById(id);
         OrderResponse response = toResponse(order);
         return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}/pickup")
+    public ResponseEntity<OrderResponse> pickupOrder(@PathVariable UUID id) {
+        Order order = orderService.pickupOrder(id);
+        return ResponseEntity.ok(toResponse(order));
+    }
+
+    @PatchMapping("/{id}/deliver")
+    public ResponseEntity<OrderResponse> deliverOrder(@PathVariable UUID id) {
+        Order order = orderService.deliverOrder(id);
+        return ResponseEntity.ok(toResponse(order));
     }
     private OrderResponse toResponse(Order order) {
         return new OrderResponse(
