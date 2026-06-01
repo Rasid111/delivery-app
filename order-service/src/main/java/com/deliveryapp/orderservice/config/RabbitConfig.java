@@ -16,6 +16,7 @@ public class RabbitConfig {
     public static final String ROUTING_ORDER_CREATED = "order.created";
     public static final String ROUTING_ORDER_ASSIGNED = "order.assigned";
     public static final String ROUTING_ORDER_DELIVERED = "order.delivered";
+    public static final String ROUTING_ORDER_CANCELLED = "order.cancelled";
 
     @Bean
     public TopicExchange deliveryEventsExchange() {

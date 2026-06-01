@@ -16,9 +16,11 @@ public class RabbitConfig {
 
     public static final String ROUTING_ORDER_CREATED = "order.created";
     public static final String ROUTING_ORDER_DELIVERED = "order.delivered";
+    public static final String ROUTING_ORDER_CANCELLED = "order.cancelled";
 
     public static final String QUEUE_ORDER_CREATED = "payment.order-created";
     public static final String QUEUE_ORDER_DELIVERED = "payment.order-delivered";
+    public static final String QUEUE_ORDER_CANCELLED = "payment.order-cancelled";
 
     @Bean
     public TopicExchange deliveryEventsExchange() {
@@ -36,6 +38,11 @@ public class RabbitConfig {
     }
 
     @Bean
+    public Queue orderCancelledQueue() {
+        return new Queue(QUEUE_ORDER_CANCELLED, true);
+    }
+
+    @Bean
     public Binding orderCreatedBinding(Queue orderCreatedQueue, TopicExchange deliveryEventsExchange) {
         return BindingBuilder.bind(orderCreatedQueue).to(deliveryEventsExchange).with(ROUTING_ORDER_CREATED);
     }
@@ -43,6 +50,11 @@ public class RabbitConfig {
     @Bean
     public Binding orderDeliveredBinding(Queue orderDeliveredQueue, TopicExchange deliveryEventsExchange) {
         return BindingBuilder.bind(orderDeliveredQueue).to(deliveryEventsExchange).with(ROUTING_ORDER_DELIVERED);
+    }
+
+    @Bean
+    public Binding orderCancelledBinding(Queue orderCancelledQueue, TopicExchange deliveryEventsExchange) {
+        return BindingBuilder.bind(orderCancelledQueue).to(deliveryEventsExchange).with(ROUTING_ORDER_CANCELLED);
     }
 
     @Bean

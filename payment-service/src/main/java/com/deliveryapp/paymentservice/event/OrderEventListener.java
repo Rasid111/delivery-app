@@ -23,4 +23,9 @@ public class OrderEventListener {
     public void onOrderDelivered(OrderDeliveredEvent event) {
         paymentService.onOrderDelivered(event);
     }
+
+    @RabbitListener(queues = RabbitConfig.QUEUE_ORDER_CANCELLED)
+    public void onOrderCancelled(OrderCancelledEvent event) {
+        paymentService.onOrderCancelled(event);
+    }
 }

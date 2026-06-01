@@ -3,6 +3,7 @@ package com.deliveryapp.paymentservice.service;
 import com.deliveryapp.paymentservice.domain.CourierBalance;
 import com.deliveryapp.paymentservice.domain.Payment;
 import com.deliveryapp.paymentservice.domain.PaymentStatus;
+import com.deliveryapp.paymentservice.event.OrderCancelledEvent;
 import com.deliveryapp.paymentservice.event.OrderCreatedEvent;
 import com.deliveryapp.paymentservice.event.OrderDeliveredEvent;
 import com.deliveryapp.paymentservice.exception.CourierBalanceNotFoundException;
@@ -75,6 +76,23 @@ public class PaymentService {
         paymentRepository.save(payment);
 
         creditCourier(event.courierId(), earning);
+    }
+
+    /**
+     * On ORDER_CANCELLED: void the payment if it has not been settled yet.
+     * Idempotent — a COMPLETED payment is left untouched (money already paid out);
+     * an already-CANCELLED or unknown order is a no-op.
+     */
+    public void onOrderCancelled(OrderCancelledEvent event) {
+        paymentRepository.findByOrderId(event.orderId()).ifPresent(payment -> {
+            if (payment.getStatus() != PaymentStatus.PENDING) {
+                log.info("Payment for order {} is {}, skipping ORDER_CANCELLED",
+                        event.orderId(), payment.getStatus());
+                return;
+            }
+            payment.setStatus(PaymentStatus.CANCELLED);
+            paymentRepository.save(payment);
+        });
     }
 
     private void creditCourier(UUID courierId, BigDecimal earning) {

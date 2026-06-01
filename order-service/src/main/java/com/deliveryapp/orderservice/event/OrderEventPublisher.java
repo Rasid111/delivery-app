@@ -44,4 +44,12 @@ public class OrderEventPublisher {
         );
         rabbitTemplate.convertAndSend(RabbitConfig.EXCHANGE, RabbitConfig.ROUTING_ORDER_DELIVERED, event);
     }
+
+    public void publishOrderCancelled(Order order) {
+        OrderCancelledEvent event = new OrderCancelledEvent(
+                order.getId(),
+                order.getCourierId()
+        );
+        rabbitTemplate.convertAndSend(RabbitConfig.EXCHANGE, RabbitConfig.ROUTING_ORDER_CANCELLED, event);
+    }
 }
