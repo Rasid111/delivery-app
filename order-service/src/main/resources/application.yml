@@ -8,6 +8,12 @@ spring:
     password: order_pass
     driver-class-name: org.postgresql.Driver
 
+  rabbitmq:
+    host: localhost
+    port: 5673
+    username: admin
+    password: admin
+
   jpa:
     hibernate:
       ddl-auto: validate
@@ -24,6 +30,9 @@ spring:
 
 server:
   port: 8081
+
+courier-service:
+  url: http://localhost:8082
 
 logging:
   level:

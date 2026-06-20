@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -24,24 +25,45 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody CreateOrderRequest request) {
         Order order = orderService.createOrder(request);
-        OrderResponse response = new OrderResponse(
-                order.getId(),
-                order.getCourierId(),
-                order.getPickupAddress(),
-                order.getDeliveryAddress(),
-                order.getPrice(),
-                order.getStatus(),
-                order.getCreatedAt(),
-                order.getUpdatedAt()
-        );
+        OrderResponse response = toResponse(order);
         URI location = URI.create("/api/orders/" + order.getId());
         return ResponseEntity.created(location).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<OrderResponse>> getOrders() {
+        List<OrderResponse> orders = orderService.getAll().stream()
+                .map(this::toResponse)
+                .toList();
+        return ResponseEntity.ok(orders);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<OrderResponse> getOrder(@PathVariable UUID id) {
         Order order = orderService.getById(id);
-        OrderResponse response = new OrderResponse(
+        OrderResponse response = toResponse(order);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable UUID id) {
+        orderService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/pickup")
+    public ResponseEntity<OrderResponse> pickupOrder(@PathVariable UUID id) {
+        Order order = orderService.pickupOrder(id);
+        return ResponseEntity.ok(toResponse(order));
+    }
+
+    @PatchMapping("/{id}/deliver")
+    public ResponseEntity<OrderResponse> deliverOrder(@PathVariable UUID id) {
+        Order order = orderService.deliverOrder(id);
+        return ResponseEntity.ok(toResponse(order));
+    }
+    private OrderResponse toResponse(Order order) {
+        return new OrderResponse(
                 order.getId(),
                 order.getCourierId(),
                 order.getPickupAddress(),
@@ -51,6 +73,5 @@ public class OrderController {
                 order.getCreatedAt(),
                 order.getUpdatedAt()
         );
-        return ResponseEntity.ok(response);
     }
 }
