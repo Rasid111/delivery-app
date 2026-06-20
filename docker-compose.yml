@@ -1,0 +1,54 @@
+services:
+  postgres-order:
+    image: postgres:16-alpine
+    container_name: delivery-postgres-order
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: order_db
+      POSTGRES_USER: order_user
+      POSTGRES_PASSWORD: order_pass
+    volumes:
+      - postgres_order_data:/var/lib/postgresql/data
+
+  postgres-courier:
+    image: postgres:16-alpine
+    container_name: delivery-postgres-courier
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: courier_db
+      POSTGRES_USER: courier_user
+      POSTGRES_PASSWORD: courier_pass
+    volumes:
+      - postgres_courier_data:/var/lib/postgresql/data
+
+  postgres-payment:
+    image: postgres:16-alpine
+    container_name: delivery-postgres-payment
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_DB: payment_db
+      POSTGRES_USER: payment_user
+      POSTGRES_PASSWORD: payment_pass
+    volumes:
+      - postgres_payment_data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: delivery-rabbitmq
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+volumes:
+  rabbitmq_data:
+  postgres_order_data:
+  postgres_courier_data:
+  postgres_payment_data:

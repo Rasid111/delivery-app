@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1779545459215-1
+      author: rasid
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_orders
+                  name: id
+                  type: UUID
+              - column:
+                  name: courier_id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: pickup_address
+                  type: VARCHAR(500)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: delivery_address
+                  type: VARCHAR(500)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: price
+                  type: DECIMAL(10, 2)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: status
+                  type: VARCHAR(20)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: timestamp
+            tableName: orders
+
