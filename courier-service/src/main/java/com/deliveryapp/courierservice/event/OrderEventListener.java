@@ -24,4 +24,9 @@ public class OrderEventListener {
     public void onOrderDelivered(OrderDeliveredEvent event) {
         courierService.markFree(event.courierId());
     }
+
+    @RabbitListener(queues = RabbitConfig.QUEUE_ORDER_CANCELLED)
+    public void onOrderCancelled(OrderCancelledEvent event) {
+        courierService.markFree(event.courierId());
+    }
 }

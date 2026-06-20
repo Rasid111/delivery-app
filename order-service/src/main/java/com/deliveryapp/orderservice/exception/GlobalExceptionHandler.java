@@ -30,4 +30,11 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(ex.getMessage());
     }
+
+    @ExceptionHandler(OrderNotCancellableException.class)
+    public ResponseEntity<String> handleOrderNotCancellable(OrderNotCancellableException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ex.getMessage());
+    }
 }

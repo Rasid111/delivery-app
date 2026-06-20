@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -29,11 +30,25 @@ public class OrderController {
         return ResponseEntity.created(location).body(response);
     }
 
+    @GetMapping
+    public ResponseEntity<List<OrderResponse>> getOrders() {
+        List<OrderResponse> orders = orderService.getAll().stream()
+                .map(this::toResponse)
+                .toList();
+        return ResponseEntity.ok(orders);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<OrderResponse> getOrder(@PathVariable UUID id) {
         Order order = orderService.getById(id);
         OrderResponse response = toResponse(order);
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable UUID id) {
+        orderService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}/pickup")
